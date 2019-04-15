@@ -1,0 +1,32 @@
+<title> Choose seats </title>
+
+{% load static %}
+
+{% block content %}
+
+<form method="post">{% csrf_token %}
+
+{% for seat in form %}
+{% if seat is True %}
+<script>
+  var s={{seat}};
+  s.disabled=true;
+  <p> only if seat is True...</p>
+</script>
+<p> only if seat is True </p>
+{% else %}
+{{seat}}
+{% endif %}
+{% endfor %}
+<button type="submit"> Select seats</button>
+</form>
+
+<script>
+$(document).ready(function(){
+a={{seat}};
+if(a.is(':checked')){
+a.disable=true;
+}
+});
+</script>
+{% endblock %}

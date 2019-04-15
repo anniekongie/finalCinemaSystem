@@ -1,0 +1,60 @@
+from django.db import models
+import uuid
+
+from accounts.models import UserInfo
+from django.contrib.postgres.fields import ArrayField
+
+# Create your models here.                                                                                                                                       
+
+class PaymentInfo(models.Model):
+    userAccount = models.OneToOneField(UserInfo,
+                                       on_delete=models.CASCADE,
+                                       primary_key=True)
+    cardNumber = models.CharField(max_length=50, blank=True, default='0000')
+    cardMonth = models.CharField(max_length=50, blank=True, default='0000')
+    cardYear = models.CharField(max_length=50, blank=True, default='0000')
+    cardPin = models.CharField(max_length=50, blank=True, default='0000')
+    cardFirstName = models.CharField(max_length=50, blank=True, default='')
+    cardLastName = models.CharField(max_length=50, blank=True, default='')
+
+
+class PromoCode(models.Model):
+    promoCode=models.CharField(max_length=50, blank=True, default='', primary_key=True)
+    discount=models.CharField(max_length=25, blank=True, default='00')
+
+
+class Order(models.Model):
+    orderid= models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
+    userAccount = models.ForeignKey(UserInfo,on_delete=models.CASCADE, default=1)
+    date = models.DateTimeField(null=True, blank=True)
+    title = models.CharField(max_length=50, blank=True, default='')
+    adultQuantity = models.CharField(max_length=50, blank=True, default='')
+    childQuantity = models.CharField(max_length=50, blank=True, default='')
+    seniorQuantity = models.CharField(max_length=50, blank=True, default='')
+    totalSum = models.CharField(max_length=50, blank=True, default='')
+    adjustedSum=models.CharField(max_length=50, blank=True, null=True)
+
+    def format_time(self):
+        return date.strftime("%H:%M")
+
+#class Auditorium(models.Model):
+#    id=models.IntegerField(primary_key=True)
+
+class Showing(models.Model):
+    id=models.AutoField(primary_key=True)
+    s1=models.BooleanField(default=False)
+    s2=models.BooleanField(default=False)
+    s3=models.BooleanField(default=False)
+    s4=models.BooleanField(default=False)
+    s5=models.BooleanField(default=False)
+    s6=models.BooleanField(default=False)
+    s7=models.BooleanField(default=False)
+    s8=models.BooleanField(default=False)
+
+class TicketSetting(models.Model):
+    movie=models.OneToOneField('movies.MovieInfo',on_delete=models.CASCADE, primary_key=True, default='')
+    adultPrice=models.IntegerField(blank=True,default=0)
+    childPrice=models.IntegerField(blank=True,default=0)
+    seniorPrice=models.IntegerField(blank=True,default=0)
+    fee=models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+

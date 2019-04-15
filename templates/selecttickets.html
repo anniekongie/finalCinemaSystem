@@ -1,0 +1,11 @@
+<title>Select Tickets</title>
+
+{% load static %}
+{% block content %}
+<form action="{% url 'chooseTickets' showing=showing.id %}"method="post"> {% csrf_token %}
+{{form.as_p}}
+<input type="submit"> Submit
+</form>
+{% endblock %}
+
+

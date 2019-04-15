@@ -1,0 +1,12 @@
+<title> Checkout </title>
+<h1> Enter payment info </h1>
+{% load static %}
+
+{% block content %}
+
+<form method="post" action="{url 'orderComplete' orderid=orderid}"> {% csrf_token %}
+{{form.as_p}}
+<input type="submit"> Submit </input>
+</form>
+
+{% endblock %}

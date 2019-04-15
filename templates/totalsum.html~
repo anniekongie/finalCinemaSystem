@@ -1,0 +1,31 @@
+<title> Total price </title>
+{% load static %}
+{% block content %}
+Adult: {{adult}} x ${{adultPrice}}.00 <br>
+Child: {{child}} x ${{childPrice}}.00 <br>
+Senior: {{senior}} x ${{seniorPrice}}.00 <br>
+<hr>
+Total: ${{order.totalSum}} <br>
+with 7% tax and ${{fee}} booking fee
+
+{% if promo %}
+Discount applied: {{promo.promotionCode}} {{promo.discount}}% off <br>
+- ${{subtractValue|floatformat:"2"}} <br>
+Adjusted Total: ${{order.adjustedSum}} <br>
+{% endif %}
+
+<form action="{% url 'confirmOrder' orderid=orderid %}" method="post"> {% csrf_token %}
+<input type="text" name="promo"> Promo Code
+<input type="submit"> Apply Promo
+</form>
+
+
+<a href="{% url 'checkout' orderid=order.id %}"> Checkout </a>
+
+{% endblock %}
+
+
+
+
+
+
