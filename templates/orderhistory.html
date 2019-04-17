@@ -1,0 +1,20 @@
+<title> Order History </title>
+
+{% block content %}
+
+{% if history %}
+{% for order in history %}
+<p> order no.:{{order.orderid}}</p>
+<p> order total: {% if order.adjustedSum %} {{order.adjustedSum}} {% else %} {{order.totalSum}} {% endif %}</p>
+<p> movie: {{order.title}}</p>
+<p> showtime: {{order.date}} </p>
+
+
+<hr>
+{% endfor %}
+
+{% else %}
+<h4>You have no previous orders</h4>
+{% endif %}
+
+{% endblock %}

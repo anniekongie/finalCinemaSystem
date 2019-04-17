@@ -63,6 +63,7 @@ def viewMovie(request, title):
    # return render(request, 'movieInfo.html', context)                                           
 
 def movieSearch(request):
+    print('IN MOVIESEARCHVIEW')
     movieObj=None;
     if request.method =='POST':
         query = request.POST['query']
@@ -78,11 +79,11 @@ def movieSearch(request):
             return render(request, 'searchResults.html', context)
     else:
         movieObj=MovieInfo.objects.all()
-    return render(request, 'home.html', {'movies': movieObj})
+        return render(request, 'home.html', {'movies': movieObj})
 
 def movieList(request):
     if request.method=='POST':
-        searchText=request.POST['searchText']
+        searchText=request.POST.get('searchText','')
         filt1=request.POST.get('filter1',False)
         filt2=request.POST.get('filter2',False)
         filt3=request.POST.get('filter3',False)
@@ -100,10 +101,7 @@ def movieList(request):
                 'movies': movieList,
                 }
             return render(request, 'movieList.html', context)
-
+        
     else:
         movieList=MovieInfo.objects.all()
         return render(request, 'movieList.html',{'movies':movieList})
-
-
-

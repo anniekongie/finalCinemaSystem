@@ -1,0 +1,44 @@
+.body{
+    margin: 60px;
+}
+
+#showtimes-color{
+    color: #E21A1B;
+}
+
+input{
+    margin-bottom: 30px;
+    padding: 5px 10px;
+    font-size: 15px;
+}
+
+select{
+    margin-bottom: 30px;
+    padding: 5px 10px;
+    font-size: 15px;
+}
+#comment{
+    font-size: 15px;
+}
+
+textarea {
+    display:block;
+    clear:both;
+    margin-top: 30px;
+}
+
+li{
+    list-style-type: none;
+    color: rgb(226, 26, 27);
+}
+
+button{
+    background-color: rgb(226, 26, 27); /* Green */
+    border: none;
+    color: white;
+    padding: 7px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; 
+}

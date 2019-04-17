@@ -20,12 +20,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-   # path('',include('accounts.urls')),                         
+    path('',include('accounts.urls')),                         
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('accounts/',include('django.contrib.auth.urls')),
     path('booking/',include('booking.urls')),
-    path('', views.movieSearch,name='movieSearch'),
+    #path('', views.movieSearch,name='movieSearch'),
     path('',include('movies.urls')),
 ]
 

@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.core.mail import send_mail
-#from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash
 import string,random
+
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -15,13 +16,15 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User,AbstractUser
 
 from .models import UserInfo
-from .forms import loginForm, registerForm
-
-
+from .forms import loginForm, registerForm, EditProfileForm
+from booking.models import Order
+from movies.models import MovieInfo
+from datetime import datetime
 # Create your views here.
 
 def home(request):
-    return render(request,'home.html')
+    movieObj=MovieInfo.objects.all()
+    return render(request, 'home.html', {'movies': movieObj})
 
 def login(request):
     username='not logged in'
@@ -76,3 +79,49 @@ def activate(request, uidb64, token):
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
+
+def editProfile(request):
+    if request.method=='POST':
+        form = EditProfileForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/accounts/profile')
+        else:
+            return HttpResponse(form.errors)
+    else:
+        form=EditProfileForm(instance=request.user)
+        context={
+            'form':form
+            }
+        return render(request, 'editProfile.html', context)
+
+def viewProfile(request):
+    
+    context={
+        'user':request.user
+        }
+    return render(request,'profile.html',context)
+
+def changePassword(request):
+    if request.method=='POST':
+        form=PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request,form.user)
+            return redirect('http://127.0.0.1:8000/accounts/profile/')
+        else:
+            return HttpResponse(form.errors)
+    else:
+        form=PasswordChangeForm(user=request.user)
+        context={'form':form}
+        return render(request,'change_password.html',context)
+
+def orderHistory(request,userid):
+    user=UserInfo.objects.get(id2=userid)
+    history=Order.objects.filter(userAccount=user).filter(isPaid=True)
+    currtime=datetime.now()
+    context={
+        'history':history,
+        'currtime':currtime
+        }
+    return render(request,'orderHistory.html',context)

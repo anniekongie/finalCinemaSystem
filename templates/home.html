@@ -1,9 +1,8 @@
 {% load static %}
 <title>Home</title>
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+\
-lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet"> 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{% static 'accounts/style.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'accounts/navbar.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'accounts/home-page.css' %}">
@@ -14,8 +13,7 @@ lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
         <div class="nav-wrapper">
          <div class="grad-bar"></div>
          <nav class="navbar">
-           <img src="https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,w_1600/v1524171371/amc\
--cdn/general/amc-classic-brand-creative/amc_logo_1200x856.png" alt="Company Logo">
+           <img src="https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,q_auto,w_1600/v1524171371/amc-cdn/general/amc-classic-brand-creative/amc_logo_1200x856.png" alt="Company Logo">
            <div class="menu-toggle" id="mobile-menu">
              <span class="bar"></span>
              <span class="bar"></span>
@@ -23,22 +21,22 @@ lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
            </div>
 
               <ul class="nav no-search">
-                     <li class="nav-item"><a href="/movies/results" >Movies</a></li>
-                          <li class="nav-item"><a href="#">Tickets</a></li>
-                               <li class="nav-item"><a href="#">My Profile</a></li>
-                                    <i class="fas fa-search" id="search-icon"></i>
-                                         <form id = "search-form" method="post">{% csrf_token %}
-                                                  <input class="search-input" type="text" name="query" placeholder="Sea\
-rch..">
-                                                       </form>
-                                            </ul>
+                <li class="nav-item"><a href="/movielist" >Movies</a></li>
+                <li class="nav-item"><a href="#">Tickets</a></li>
+		{% if user.is_authenticated %}
+                <li class="nav-item"><a href="http://127.0.0.1:8000/accounts/profile">My Profile</a></li>
+                {% endif %}
+		<i class="fas fa-search" id="search-icon"></i>
+                <form id= "search-form" method="post" action="/searchresult/">{% csrf_token %}
+                  <input class="search-input" type="text" name="query" placeholder="Search..">
+                </form>
+              </ul>
 
          </nav>
          </div>
 
 <div class="body">
   <center><h1>Cinema E Booking Home Page</h1>
-
     {% if user.is_authenticated %}
     <br><br>
       Hi {{ user.first_name }}!<br><br>

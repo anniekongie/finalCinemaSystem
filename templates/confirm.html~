@@ -1,0 +1,18 @@
+{% load static %}
+<title> Order Complete </title>
+{% block content %}
+
+<h1> Payment and order confirmed! </h1>
+
+<h2>Order no: {{order.orderid}}</h2>
+<p>Movie: {{title}}<p>
+<p>Showtime: {{showtime}} <p>
+<p>Adult tickets: {{order.adultQuantity}}<p>
+<p>Child tickets: {{order.childQuantity}} <p>
+<p>Senior tickets: {{order.seniorQuantity}} <p>
+<p>Total: {% if order.adjustedSum %}{{order.adjustedSum}} {% else %} {{order.totalSum}} {% endif %}<p>
+<p>Payment method:<p>
+<p>Card number --{{payment.cardNumber}}</p>
+
+
+{% endblock %}

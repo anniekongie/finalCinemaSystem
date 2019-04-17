@@ -4,8 +4,8 @@ from . import views
 
 urlpatterns = [
     path('searchresult/',views.movieSearch,name='movieSearch'),
-    path('movies/results/',views.movieList,name='movieList'),
-    path('<str:title>/', views.viewMovie,name='viewMovie'),
+    path('movielist/',views.movieList,name='movieList'),
+    path('movies/<str:title>/', views.viewMovie,name='viewMovie'),
 ]
 
 

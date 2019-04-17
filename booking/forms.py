@@ -19,4 +19,4 @@ class paymentForm(ModelForm):
     class Meta:
         model=PaymentInfo
         fields=['cardNumber','cardMonth','cardYear', 'cardPin','cardFirstName','cardLastName' ]
-        exclude=['userAccount']
+

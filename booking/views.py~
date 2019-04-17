@@ -5,6 +5,12 @@ from .models import Showing, Order, PromoCode, TicketSetting, PaymentInfo
 from django.urls import reverse
 from .forms import SeatsForm, ticketsForm, paymentForm
 from django.contrib.auth.decorators import login_required
+import datetime
+
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.core.mail import send_mail
+
 # Create your views here.                                                                                                                
 
 def chooseSeats(request,showing):
@@ -104,6 +110,8 @@ def confirmOrder(request,orderid):
     if request.method=='POST':
         promoCode = request.POST.get('promo','')
         promoExists=PromoCode.objects.filter(promoCode__exact=promoCode)
+        if promoExists.expdate >= datetime.now():
+            promoExists=None
         if promoExists:
             promo = PromoCode.objects.get(promoCode__exact=promoCode)
             discount=int(promo.discount)/100
@@ -112,7 +120,6 @@ def confirmOrder(request,orderid):
             print('adjusted Cost',adjustedCost)
             print('orderObj.userAccount:', orderObj.userAccount)
             print('orderid: ', orderid)
-            #x=Order.objects.get(userAccount=orderObj.userAccount)#.update(adjustedSum=str(adjustedCost))                                                                            #x.adjustedSum=str(adjustedCost)                                                                                                                                                 
             orderObj.adjustedSum=str(adjustedCost)
             print('order\'s adjusted sum: ', orderObj.adjustedSum)
             orderObj.save()
@@ -149,29 +156,59 @@ def checkout(request,orderid):
     paymentInfo=PaymentInfo.objects.filter(userAccount=curruser)
 
     if request.method=='POST': #if submit is clicked
-        form=paymentForm(request.POST)
+        print('in checkout view...')
+        form=paymentForm(request.POST,instance=PaymentInfo(userAccount=curruser))
         if form.is_valid():
-            print('curruser',curruser)
-            print('curruser id',curruser.id)
-            form.save()
-            print('form.useraccount after saving: ',form.userAccount)
+            paymentObj=form.save()
+            orderObj.isPaid=True
+            orderObj.save()
+            
+
+            #sending confrimation email
+            user=orderObj.userAccount.first_name
+            totalsum=orderObj.totalSum
+            adults=orderObj.adultQuantity
+            child=orderObj.childQuantity
+            senior= orderObj.seniorQuantity
+            totalSeats=int(adults)+int(child)+int(senior)
+            print('totalseats:', totalSeats)
+            mail_subject='We\'ve recieved your order!'
+            message=render_to_string('orderconfirmed_email.html', {
+                    'user': user,
+                    'adjusted':adjustedSum,
+                    'total':totalsum,
+                    'adult':adults,
+                    'child':child,
+                    'senior':senior,
+                    'showtime':showtime,
+                    'title':title,
+                    'totalSeats':totalSeats,
+                    'orderid': orderObj.orderid,
+                    })
+            reciever=orderObj.userAccount.email
+            print('email: ', reciever)
+            email=EmailMessage(mail_subject, message, to=[reciever])
+            email.send()
+            #emal sent 
+
+
             context={
                 'title':title,
                 'total':adjustedSum,
                 'ticketSetting':ticketSetting,
                 'order':orderObj,
                 'showtime':showtime,
-                'form':form,
+                'payment':paymentObj,
                 }
             return render(request,'confirm.html',context)
-    else:#when you first come to this page
+    else: #when you first come to this page
         if paymentInfo:
-            form=paymentForm(instance=paymentInfo)
+            payment=paymentInfo[0]
+            form=paymentForm(instance=payment)
         else:
             form=paymentForm()
             context={
                 'title':title,
-                'total':adjustedSum,
                 'ticketSetting':ticketSetting,
                 'order':orderObj,
                 'showtime':showtime,
@@ -179,8 +216,11 @@ def checkout(request,orderid):
                 }
         return render(request,'checkout.html',{'form':form})
          
+
 def orderComplete(request,orderid):
     orderObj=Order.objects.get(orderid=orderid)
+
+
     context={
         'order':order,
         }

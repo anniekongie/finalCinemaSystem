@@ -1,0 +1,38 @@
+
+table, th, td{
+   /*border: 1px solid black;
+   /* For styling purposes */
+}
+
+td.movie-table{
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#poster{
+    width:200px;
+    height:300px;
+}
+
+#spacer{
+    padding-top: 10px;
+}
+
+#movie-title{
+    font-size: 20px;
+}
+
+#now-playing, #coming-soon{
+    color: #E21A1B;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #E21A1B;
+}
+
+#movie-title-coming-soon{
+    font-size: 20px;
+}
+
+td.coming-soon-table{
+    padding-left: 50px;
+    padding-right: 50px;
+}

@@ -6,9 +6,10 @@ from django.conf.urls import url
 urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', views.signUp, name='signup'),
-    #path('activation/', views.activation, name='activation'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        views.activate, name='activate'),
-    #path('accounts/',views.home, name='home'),
-    
+        views.activate, name='activate'),    
+    path('profile/', views.viewProfile, name='view_profile'),
+    path('profile/edit/',views.editProfile, name='edit_profile'),
+    path('profile/password/', views.changePassword, name='change_password'),
+    path('profile/orderhistory/<userid>/', views.orderHistory,name='orderHistory'),
 ]
